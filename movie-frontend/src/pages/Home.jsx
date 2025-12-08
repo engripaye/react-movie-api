@@ -11,9 +11,11 @@ function Home() {
 
 
     return <div className="Home">
+
+        <form></form>
         <div className="movies-grid">
             {movies.map(movie =>
-                <MovieCard movie={movie} key={movie.id}/> )}
+                <MovieCard movie={movie} key={movie.id}/>)}
         </div>
     </div>
 }
