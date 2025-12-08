@@ -8,7 +8,7 @@ function App() {
       <>
         {movieNumber === 1 ? (<MovieCard movie={{title: "Tim's film", release_date: "2024"}}/>)
             : (
-            <MovieCard movie={{title: "Joe's film", release_date: "2020"}}/>
+            <MovieCard movie={{title: "Joe's film", release_date: "2021"}}/>
           )}
 
   </>
