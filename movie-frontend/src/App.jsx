@@ -2,7 +2,7 @@ import './App.css'
 import MovieCard from "./component/MovieCard.jsx";
 
 function App() {
-  const movieNumber = 1;
+  const movieNumber = 2;
 
   return (
       <>
