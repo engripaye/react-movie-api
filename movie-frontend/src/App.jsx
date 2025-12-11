@@ -2,12 +2,14 @@ import './App.css'
 import Home from "./pages/Home.jsx";
 import {Route, Routes} from "react-router-dom";
 import Favorites from "./pages/Favorites.jsx";
-
+import Navbar from "./component/Navbar.jsx";
 
 function App() {
 
 
   return (
+      <div>
+          <Navbar />
       <main className="main-content">
 
           <Routes>
@@ -17,7 +19,7 @@ function App() {
           </Routes>
       </main>
 
-
+    </div>
 
   );
 
