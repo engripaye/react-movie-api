@@ -26,7 +26,7 @@ function Home() {
     }, []);
 
     const handleSearch = async (e) => {
-        e.preventDefault()
+        e.preventDefault();
         if (!searchQuery.trim()) return
         if(loading) return
 
@@ -41,7 +41,7 @@ function Home() {
         }finally {
             setLoading(false)
         }
-    }
+    };
 
 
     return <div className="Home">
