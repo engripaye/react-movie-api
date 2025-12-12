@@ -7,7 +7,6 @@ import {MovieProvider} from "./contexts/MovieContext.jsx";
 
 function App() {
 
-
   return (
       <MovieProvider>
           <Navbar />

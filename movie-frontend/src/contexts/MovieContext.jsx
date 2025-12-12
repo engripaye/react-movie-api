@@ -35,7 +35,7 @@ export const MovieProvider = ({children}) => {
             favorites,
             addToFavorites,
             removeFromFavorites,
-            setFavorites
+            isFavorite
     }
 
     return <MovieContext.Provider value={value}>
