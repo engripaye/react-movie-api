@@ -22,25 +22,27 @@ function Home() {
     const [error, setError] = useState(null);
     const [loading, setLoading] = useState(true);
 
-    // ⭐ Recommended movies
-    const recommended = nowPlaying.filter(movie => movie.vote_average > 7);
+    const recommended = Array.isArray(nowPlaying)
+        ? nowPlaying.filter(movie => movie.vote_average > 7)
+        : [];
 
     useEffect(() => {
         const loadData = async () => {
+            setLoading(true);
             try {
                 const [pop, now, top, tv] = await Promise.all([
-                    getPopularMovies(),
-                    getNowPlayingMovies(),
-                    getTopRatedMovies(),
-                    getPopularTV()
+                    getPopularMovies().catch(() => []),
+                    getNowPlayingMovies().catch(() => []),
+                    getTopRatedMovies().catch(() => []),
+                    getPopularTV().catch(() => []),
                 ]);
 
-                setPopular(pop);
-                setNowPlaying(now);
-                setTopRated(top);
-                setTvShows(tv);
+                setPopular(pop || []);
+                setNowPlaying(now || []);
+                setTopRated(top || []);
+                setTvShows(tv || []);
             } catch (err) {
-                console.log(err);
+                console.error(err);
                 setError("Failed to load content...");
             } finally {
                 setLoading(false);
@@ -50,24 +52,29 @@ function Home() {
         loadData();
     }, []);
 
-    const handleSearch = async (e) => {
+    const handleSearch = async e => {
         e.preventDefault();
         if (!searchQuery.trim()) return;
 
         setLoading(true);
         try {
             const results = await searchMovies(searchQuery);
-            setPopular(results);
+            setPopular(Array.isArray(results) ? results : []);
         } catch (err) {
+            console.error(err);
             setError("Search failed...");
         } finally {
             setLoading(false);
         }
     };
 
-    const handleOpenTrailer = async (id) => {
-        const key = await getMovieTrailer(id);
-        setSelectedTrailer(key);
+    const handleOpenTrailer = async id => {
+        try {
+            const key = await getMovieTrailer(id);
+            setSelectedTrailer(key);
+        } catch (err) {
+            console.error(err);
+        }
     };
 
     return (
@@ -77,7 +84,7 @@ function Home() {
                     type="text"
                     placeholder="Search for movies or series..."
                     value={searchQuery}
-                    onChange={(e) => setSearchQuery(e.target.value)}
+                    onChange={e => setSearchQuery(e.target.value)}
                     className="search-input"
                 />
                 <button type="submit" className="search-button">Search</button>
@@ -105,18 +112,18 @@ function Home() {
     );
 }
 
-// ✅ Section Component
-const Section = ({ title, movies, onPlay }) => (
+// ✅ Safe Section Component
+const Section = ({ title, movies = [], onPlay }) => (
     <div>
         <h2 style={{ margin: "1rem" }}>{title}</h2>
         <div className="movies-row">
-            {movies.map(movie => (
-                <MovieCard
-                    key={movie.id}
-                    movie={movie}
-                    onPlay={onPlay}
-                />
-            ))}
+            {Array.isArray(movies) && movies.length > 0 ? (
+                movies.map(movie => (
+                    <MovieCard key={movie.id} movie={movie} onPlay={onPlay} />
+                ))
+            ) : (
+                <div style={{ margin: "1rem" }}>No movies available</div>
+            )}
         </div>
     </div>
 );
