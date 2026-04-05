@@ -66,3 +66,14 @@ h2 {
   margin-left: 1rem;
   color: #e50914;
 }
+
+.movies-row {
+  display: flex;
+  overflow-x: auto;
+  gap: 1rem;
+  padding: 1rem;
+}
+
+.movies-row::-webkit-scrollbar {
+  display: none;
+}

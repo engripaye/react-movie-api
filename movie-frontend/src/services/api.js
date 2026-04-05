@@ -28,3 +28,16 @@ export const getTopRatedMovies = async () => {
     return data.results
 };
 
+export const getMovieTrailer = async (movieId) => {
+    const response = await fetch(
+        `${BASE_URL}/movie/${movieId}/videos?api_key=${API_KEY}`
+    );
+    const data = await response.json();
+
+    const trailer = data.results.find(
+        (vid) => vid.type === "Trailer" && vid.site === "YouTube"
+    );
+
+    return trailer ? trailer.key : null;
+};
+

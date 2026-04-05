@@ -7,6 +7,7 @@
   height: 100%;
   display: flex;
   flex-direction: column;
+  min-width: 200px;
 }
 
 .movie-card:hover {
@@ -107,6 +108,10 @@
   margin-top: auto;
 }
 
+.movie-card:hover {
+  transform: scale(1.08);
+  z-index: 2;
+}
 @media (max-width: 768px) {
   .movie-card {
     font-size: 0.9rem;
