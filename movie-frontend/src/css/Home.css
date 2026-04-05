@@ -61,3 +61,8 @@
   width: 100%;
   box-sizing: border-box;
 }
+
+h2 {
+  margin-left: 1rem;
+  color: #e50914;
+}
