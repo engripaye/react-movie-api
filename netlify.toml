@@ -1,4 +1,4 @@
 [build]
 base = "movie-frontend"
-publish = "movie-frontend/dist"
+publish = "dist"     # ✅ relative to base
 command = "npm run build"
