@@ -1,0 +1,4 @@
+[build]
+base = "movie-frontend"
+publish = "movie-frontend/dist"
+command = "npm run build"
