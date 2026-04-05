@@ -6,7 +6,8 @@ import {
     getPopularMovies,
     getNowPlayingMovies,
     getTopRatedMovies,
-    getMovieTrailer
+    getMovieTrailer,
+    getPopularTV
 } from "../services/api.js";
 
 import "../css/Home.css";
@@ -16,34 +17,37 @@ function Home() {
     const [popular, setPopular] = useState([]);
     const [nowPlaying, setNowPlaying] = useState([]);
     const [topRated, setTopRated] = useState([]);
+    const [tvShows, setTvShows] = useState([]);
     const [selectedTrailer, setSelectedTrailer] = useState(null);
     const [error, setError] = useState(null);
     const [loading, setLoading] = useState(true);
 
-    // ⭐ Recommended (filtered + optional shuffle)
+    // ⭐ Recommended movies
     const recommended = nowPlaying.filter(movie => movie.vote_average > 7);
 
     useEffect(() => {
-        const loadMovies = async () => {
+        const loadData = async () => {
             try {
-                const [pop, now, top] = await Promise.all([
+                const [pop, now, top, tv] = await Promise.all([
                     getPopularMovies(),
                     getNowPlayingMovies(),
-                    getTopRatedMovies()
+                    getTopRatedMovies(),
+                    getPopularTV()
                 ]);
 
                 setPopular(pop);
                 setNowPlaying(now);
                 setTopRated(top);
+                setTvShows(tv);
             } catch (err) {
                 console.log(err);
-                setError("Failed to load movies...");
+                setError("Failed to load content...");
             } finally {
                 setLoading(false);
             }
         };
 
-        loadMovies();
+        loadData();
     }, []);
 
     const handleSearch = async (e) => {
@@ -61,9 +65,8 @@ function Home() {
         }
     };
 
-    // 🎬 FIXED: MUST be inside component
-    const handleOpenTrailer = async (movieId) => {
-        const key = await getMovieTrailer(movieId);
+    const handleOpenTrailer = async (id) => {
+        const key = await getMovieTrailer(id);
         setSelectedTrailer(key);
     };
 
@@ -72,7 +75,7 @@ function Home() {
             <form onSubmit={handleSearch} className="search-form">
                 <input
                     type="text"
-                    placeholder="Search for movies"
+                    placeholder="Search for movies or series..."
                     value={searchQuery}
                     onChange={(e) => setSearchQuery(e.target.value)}
                     className="search-input"
@@ -90,10 +93,10 @@ function Home() {
                     <Section title="🆕 Now Playing" movies={nowPlaying} onPlay={handleOpenTrailer} />
                     <Section title="⭐ Popular Movies" movies={popular} onPlay={handleOpenTrailer} />
                     <Section title="🏆 Top Rated" movies={topRated} onPlay={handleOpenTrailer} />
+                    <Section title="📺 Popular Series" movies={tvShows} onPlay={handleOpenTrailer} />
                 </>
             )}
 
-            {/* 🎬 FIXED: inside return */}
             <TrailerModal
                 videoKey={selectedTrailer}
                 onClose={() => setSelectedTrailer(null)}
@@ -102,7 +105,7 @@ function Home() {
     );
 }
 
-// ✅ FIXED: pass onPlay
+// ✅ Section Component
 const Section = ({ title, movies, onPlay }) => (
     <div>
         <h2 style={{ margin: "1rem" }}>{title}</h2>

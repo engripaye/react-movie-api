@@ -41,3 +41,10 @@ export const getMovieTrailer = async (movieId) => {
     return trailer ? trailer.key : null;
 };
 
+export const getPopularTV = async () => {
+    const res = await fetch(
+        `https://api.themoviedb.org/3/tv/popular?api_key=YOUR_API_KEY`
+    );
+    const data = await res.json();
+    return data.results;
+};

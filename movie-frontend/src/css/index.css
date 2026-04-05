@@ -70,6 +70,31 @@ button:focus-visible {
   outline: 4px auto -webkit-focus-ring-color;
 }
 
+/* DARK MODE (default) */
+body.dark {
+  background-color: #0f0f0f;
+  color: white;
+}
+
+/* LIGHT MODE */
+body.light {
+  background-color: #ffffff;
+  color: #111;
+}
+.theme-toggle {
+  position: fixed;
+  top: 15px;
+  right: 20px;
+  padding: 8px 12px;
+  border-radius: 20px;
+  border: none;
+  cursor: pointer;
+}
+
+/* smooth transition */
+body {
+  transition: all 0.3s ease;
+}
 @media (prefers-color-scheme: light) {
   :root {
     color: #213547;
