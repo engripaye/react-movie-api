@@ -9,7 +9,6 @@ function MovieCard({ movie, onPlay }) {
 
     const [hoverTrailer, setHoverTrailer] = useState(null);
 
-    // ✅ FIX: useRef for timeout (prevents bugs on re-render)
     const hoverTimeout = useRef(null);
 
     const handleMouseEnter = () => {
@@ -19,7 +18,7 @@ function MovieCard({ movie, onPlay }) {
                 movie.first_air_date ? "tv" : "movie"
             );
             setHoverTrailer(key);
-        }, 500); // delay prevents too many API calls
+        }, 500);
     };
 
     const handleMouseLeave = () => {
@@ -33,6 +32,15 @@ function MovieCard({ movie, onPlay }) {
         else addToFavorites(movie);
     }
 
+    // ✅ Use poster_path, fallback to backdrop_path, fallback to placeholder
+    const imageUrl = movie.poster_path
+        ? `https://image.tmdb.org/t/p/w500${movie.poster_path}`
+        : movie.backdrop_path
+            ? `https://image.tmdb.org/t/p/w500${movie.backdrop_path}`
+            : "/fallback-image.jpg"; // optional placeholder image
+
+    const title = movie.title || movie.name || "No title";
+
     return (
         <div
             className="movie-card"
@@ -40,8 +48,6 @@ function MovieCard({ movie, onPlay }) {
             onMouseLeave={handleMouseLeave}
         >
             <div className="movie-poster">
-
-                {/* 🎬 Hover Trailer OR Poster */}
                 {hoverTrailer ? (
                     <iframe
                         className="hover-trailer"
@@ -51,8 +57,8 @@ function MovieCard({ movie, onPlay }) {
                     />
                 ) : (
                     <img
-                        src={`https://image.tmdb.org/t/p/w500${movie.poster_path}`}
-                        alt={movie.title}
+                        src={imageUrl}
+                        alt={title}
                     />
                 )}
 
@@ -63,20 +69,14 @@ function MovieCard({ movie, onPlay }) {
                     >
                         {favorite ? "❤️" : "🤍"}
                     </button>
-                    <button onClick={() => onPlay(movie.id)}>▶️</button>
+                    <button onClick={() => onPlay(movie)}>▶️</button>
                 </div>
             </div>
 
             <div className="movie-info">
-                <h3>{movie.title || movie.name}</h3>
-
-                <p>
-                    {(movie.release_date || movie.first_air_date)?.split("-")[0]}
-                </p>
-
-                <span className="rating">
-                    ⭐ {movie.vote_average.toFixed(1)}
-                </span>
+                <h3>{title}</h3>
+                <p>{(movie.release_date || movie.first_air_date || "").split("-")[0]}</p>
+                <span className="rating">⭐ {movie.vote_average.toFixed(1)}</span>
             </div>
         </div>
     );

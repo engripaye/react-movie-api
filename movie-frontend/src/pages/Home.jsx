@@ -55,7 +55,8 @@ function Home() {
 
                 // Latest Korean drama for hero banner
                 if (latestKdrama && latestKdrama.length > 0) {
-                    setKdramaOfTheDay(latestKdrama[0]);
+                    const dramaWithImage = latestKdrama.find(d => d.poster_path || d.backdrop_path);
+                    setKdramaOfTheDay(dramaWithImage || latestKdrama[0]);
                 }
 
                 setKoreanSeries(koreanFiltered);
