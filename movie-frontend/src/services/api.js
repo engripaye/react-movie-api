@@ -48,3 +48,11 @@ export const getPopularTV = async () => {
     const data = await res.json();
     return data.results;
 };
+
+export const getKoreanTV = async () => {
+    const res = await fetch(
+        `${BASE_URL}/discover/tv?api_key=${API_KEY}&with_original_language=ko&sort_by=popularity.desc`
+    );
+    const data = await res.json();
+    return data.results;
+};

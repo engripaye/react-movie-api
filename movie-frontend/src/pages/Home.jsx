@@ -7,7 +7,8 @@ import {
     getNowPlayingMovies,
     getTopRatedMovies,
     getMovieTrailer,
-    getPopularTV
+    getPopularTV,
+    getKoreanTV
 } from "../services/api.js";
 
 import "../css/Home.css";
@@ -21,6 +22,7 @@ function Home() {
     const [selectedTrailer, setSelectedTrailer] = useState(null);
     const [error, setError] = useState(null);
     const [loading, setLoading] = useState(true);
+    const [koreanSeries, setKoreanSeries] = useState([]);
 
     const recommended = Array.isArray(nowPlaying)
         ? nowPlaying.filter(movie => movie.vote_average > 7)
@@ -35,12 +37,15 @@ function Home() {
                     getNowPlayingMovies().catch(() => []),
                     getTopRatedMovies().catch(() => []),
                     getPopularTV().catch(() => []),
+                    getKoreanTV().catch(() => []),
                 ]);
 
                 setPopular(pop || []);
                 setNowPlaying(now || []);
                 setTopRated(top || []);
                 setTvShows(tv || []);
+                const koreanFiltered = korean.filter(show => show.vote_average > 7);
+                setKoreanSeries(koreanFiltered);
             } catch (err) {
                 console.error(err);
                 setError("Failed to load content...");
@@ -67,6 +72,8 @@ function Home() {
             setLoading(false);
         }
     };
+
+
 
     const handleOpenTrailer = async (movie) => {
         try {
@@ -104,6 +111,11 @@ function Home() {
                     <Section title="⭐ Popular Movies" movies={popular} onPlay={handleOpenTrailer} />
                     <Section title="🏆 Top Rated" movies={topRated} onPlay={handleOpenTrailer} />
                     <Section title="📺 Popular Series" movies={tvShows} onPlay={handleOpenTrailer} />
+                    <Section
+                        title="🇰🇷 Korean Series"
+                        movies={koreanSeries}
+                        onPlay={handleOpenTrailer}
+                    />
                 </>
             )}
 
