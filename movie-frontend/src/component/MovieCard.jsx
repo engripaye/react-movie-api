@@ -73,7 +73,7 @@ function MovieCard({ movie, onPlay }) {
             <div className="movie-info">
                 <h3>{movie.title || movie.name}</h3>
                 <p>{(movie.release_date || movie.first_air_date)?.split("-")[0]}</p>
-                <span className="rating">⭐ {movie.vote_average.toFixed(1)}</span>
+                <span className="rating">⭐ {movie.vote_average?.toFixed(1) ?? "N/A"}</span>
             </div>
         </div>
     );
