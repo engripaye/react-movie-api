@@ -12,10 +12,10 @@ function Navbar({ toggleTheme, theme }) {
                 <Link to="/" className="nav-link">Home</Link>
                 <Link to="/favorites" className="nav-link">Favorites</Link>
 
-                {/* ✅ ADD THIS */}
-                <button className="theme-toggle" onClick={toggleTheme}>
-                    {theme === "dark" ? "🌞 Light" : "🌙 Dark"}
-                </button>
+                {/*/!* ✅ ADD THIS *!/*/}
+                {/*<button className="theme-toggle" onClick={toggleTheme}>*/}
+                {/*    {theme === "dark" ? "🌞 Light" : "🌙 Dark"}*/}
+                {/*</button>*/}
             </div>
         </nav>
     );
