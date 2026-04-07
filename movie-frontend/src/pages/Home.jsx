@@ -130,20 +130,29 @@ function Home() {
                         onPlay={handleOpenTrailer}
                     />
                     {kdramaOfTheDay && (
+                        <Section
+                            title="🔥 Korean Drama of the Day"
+                            movies={[kdramaOfTheDay]}
+                            onPlay={handleOpenTrailer}
+                        />
+                    )}
+                    {kdramaOfTheDay && (
                         <div className="kdrama-hero">
                             <img
                                 className="kdrama-hero-img"
                                 src={
                                     kdramaOfTheDay.backdrop_path
                                         ? `https://image.tmdb.org/t/p/original${kdramaOfTheDay.backdrop_path}`
-                                        : `https://image.tmdb.org/t/p/w500${kdramaOfTheDay.poster_path}`
+                                        : kdramaOfTheDay.poster_path
+                                            ? `https://image.tmdb.org/t/p/w500${kdramaOfTheDay.poster_path}`
+                                            : "/fallback-image.jpg" // optional fallback
                                 }
-                                alt={kdramaOfTheDay.name}
+                                alt={kdramaOfTheDay.name || kdramaOfTheDay.title}
                             />
                             <div className="hero-overlay">
                                 <h1>🔥 Korean Drama of the Day</h1>
                                 <h2>{kdramaOfTheDay.name || kdramaOfTheDay.title}</h2>
-                                <p>⭐ {kdramaOfTheDay.vote_average.toFixed(1)}</p>
+                                {kdramaOfTheDay.vote_average > 0 && <p>⭐ {kdramaOfTheDay.vote_average.toFixed(1)}</p>}
                                 <button onClick={() => handleOpenTrailer(kdramaOfTheDay)}>▶️ Watch Trailer</button>
                             </div>
                         </div>
