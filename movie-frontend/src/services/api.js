@@ -68,8 +68,8 @@ export const getLatestKoreanTV = async () => {
 // Get popular Nollywood / Nigerian movies
 export const getPopularNollywood = async () => {
     const res = await fetch(
-        `${BASE_URL}/discover/movie?api_key=${API_KEY}&region=NG&with_original_language=en&sort_by=popularity.desc`
+        `${BASE_URL}/discover/movie?api_key=${API_KEY}&with_original_language=en&sort_by=popularity.desc&with_production_countries=NG`
     );
     const data = await res.json();
-    return data.results;
+    return data.results.slice(0, 10); // top 10
 };
