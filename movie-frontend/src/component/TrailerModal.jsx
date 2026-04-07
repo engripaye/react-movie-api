@@ -11,7 +11,7 @@ function TrailerModal({ videoKey, onClose }) {
                 <iframe
                     width="100%"
                     height="400"
-                    src={`https://www.youtube.com/embed/${videoKey}`}
+                    src={`https://www.youtube.com/embed/${videoKey}?autoplay=1`} // ✅ play with sound
                     title="Trailer"
                     allowFullScreen
                 ></iframe>
