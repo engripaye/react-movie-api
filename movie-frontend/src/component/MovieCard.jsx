@@ -61,9 +61,8 @@ function MovieCard({ movie, onPlay }) {
                         className={`favorite-btn ${favorite ? "active" : ""}`}
                         onClick={onFavoriteClick}
                     >
-                        🤍
+                        {favorite ? "❤️" : "🤍"}
                     </button>
-
                     <button onClick={() => onPlay(movie.id)}>▶️</button>
                 </div>
             </div>
