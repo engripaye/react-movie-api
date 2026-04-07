@@ -64,3 +64,12 @@ export const getLatestKoreanTV = async () => {
     const data = await res.json();
     return data.results;
 };
+
+// Get popular Nollywood / Nigerian movies
+export const getPopularNollywood = async () => {
+    const res = await fetch(
+        `${BASE_URL}/discover/movie?api_key=${API_KEY}&region=NG&with_original_language=en&sort_by=popularity.desc`
+    );
+    const data = await res.json();
+    return data.results;
+};
