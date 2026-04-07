@@ -65,11 +65,11 @@ export const getLatestKoreanTV = async () => {
     return data.results;
 };
 
-// fetch 10 trending Nollywood movies
+// Get popular Nollywood / Nigerian movies
 export const getPopularNollywood = async () => {
     const res = await fetch(
-        "https://filmflux.app/api/public/trending?limit=10"
+        `${BASE_URL}/discover/movie?api_key=${API_KEY}&with_original_language=en&sort_by=popularity.desc&with_production_countries=NG`
     );
     const data = await res.json();
-    return data.movies; // contains actual Nollywood movie info
+    return data.results.slice(0, 10); // top 10
 };
