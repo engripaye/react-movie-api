@@ -10,7 +10,7 @@ import {
     getPopularTV,
     getKoreanTV,
     getLatestKoreanTV,
-    getPopularNollywood
+    getTelenovelas
 } from "../services/api.js";
 
 import "../css/Home.css";
@@ -26,7 +26,7 @@ function Home() {
     const [loading, setLoading] = useState(true);
     const [koreanSeries, setKoreanSeries] = useState([]);
     const [kdramaOfTheDay, setKdramaOfTheDay] = useState(null);
-    const [nollywood, setNollywood] = useState([]);
+    const [telenovelas, setTelenovelas] = useState([]);
 
     const recommended = Array.isArray(nowPlaying)
         ? nowPlaying.filter(movie => movie.vote_average > 7)
@@ -36,20 +36,21 @@ function Home() {
         const loadData = async () => {
             setLoading(true);
             try {
-                const [pop, now, top, tv, korean, latestKdrama, nollywoodMovies] = await Promise.all([
+                const [pop, now, top, tv, korean, latestKdrama, telenovelaShows] = await Promise.all([
                     getPopularMovies().catch(() => []),
                     getNowPlayingMovies().catch(() => []),
                     getTopRatedMovies().catch(() => []),
                     getPopularTV().catch(() => []),
                     getKoreanTV().catch(() => []),
                     getLatestKoreanTV().catch(() => []),
-                    getPopularNollywood().catch(() => [])
+                    getTelenovelas().catch(() => [])
                 ]);
 
                 setPopular(pop || []);
                 setNowPlaying(now || []);
                 setTopRated(top || []);
                 setTvShows(tv || []);
+                setTelenovelas(telenovelaShows.slice(0, 10)); // top 10 Telenovelas
 
                 // Popular Korean dramas (top-rated)
                 const koreanFiltered = (korean || []).filter(
@@ -62,7 +63,9 @@ function Home() {
                     setKdramaOfTheDay(latestKdrama.slice(0, 10)); // top 10 latest
                 }
 
-                setNollywood(nollywoodMovies || []);
+
+
+
 
             } catch (err) {
                 console.error(err);
@@ -143,11 +146,7 @@ function Home() {
                         />
                     )}
 
-                    <Section
-                        title="🎬 Popular Nollywood Movies"
-                        movies={nollywood}
-                        onPlay={handleOpenTrailer}
-                    />
+                    <Section title="📺 Telenovelas" movies={telenovelas} onPlay={handleOpenTrailer} />
 
 
                 </>
