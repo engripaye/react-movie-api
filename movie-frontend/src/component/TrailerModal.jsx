@@ -13,7 +13,7 @@ function TrailerModal({ videoKey, onClose }) {
                     height="400"
                     src={`https://www.youtube.com/embed/${videoKey}?autoplay=1`} // ✅ play with sound
                     title="Trailer"
-                    allowFullScreen
+                    allow="autoplay; fullscreen"
                 ></iframe>
             </div>
         </div>
