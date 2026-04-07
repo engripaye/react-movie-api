@@ -119,6 +119,16 @@ function Home() {
                 <div className="loading">Loading...</div>
             ) : (
                 <>
+                    <Section title="🔥 Recommended Movies" movies={recommended} onPlay={handleOpenTrailer} />
+                    <Section title="🆕 Now Playing" movies={nowPlaying} onPlay={handleOpenTrailer} />
+                    <Section title="⭐ Popular Movies" movies={popular} onPlay={handleOpenTrailer} />
+                    <Section title="🏆 Top Rated" movies={topRated} onPlay={handleOpenTrailer} />
+                    <Section title="📺 Popular Series" movies={tvShows} onPlay={handleOpenTrailer} />
+                    <Section
+                        title="🇰🇷 Korean Series"
+                        movies={koreanSeries}
+                        onPlay={handleOpenTrailer}
+                    />
                     {kdramaOfTheDay && (
                         <div
                             className="kdrama-hero"
@@ -134,16 +144,6 @@ function Home() {
                             </div>
                         </div>
                     )}
-                    <Section title="🔥 Recommended Movies" movies={recommended} onPlay={handleOpenTrailer} />
-                    <Section title="🆕 Now Playing" movies={nowPlaying} onPlay={handleOpenTrailer} />
-                    <Section title="⭐ Popular Movies" movies={popular} onPlay={handleOpenTrailer} />
-                    <Section title="🏆 Top Rated" movies={topRated} onPlay={handleOpenTrailer} />
-                    <Section title="📺 Popular Series" movies={tvShows} onPlay={handleOpenTrailer} />
-                    <Section
-                        title="🇰🇷 Korean Series"
-                        movies={koreanSeries}
-                        onPlay={handleOpenTrailer}
-                    />
                 </>
             )}
 
