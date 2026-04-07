@@ -32,7 +32,7 @@ function Home() {
         const loadData = async () => {
             setLoading(true);
             try {
-                const [pop, now, top, tv] = await Promise.all([
+                const [pop, now, top, tv, korean] = await Promise.all([
                     getPopularMovies().catch(() => []),
                     getNowPlayingMovies().catch(() => []),
                     getTopRatedMovies().catch(() => []),
@@ -44,7 +44,10 @@ function Home() {
                 setNowPlaying(now || []);
                 setTopRated(top || []);
                 setTvShows(tv || []);
-                const koreanFiltered = korean.filter(show => show.vote_average > 7);
+                const koreanFiltered = (korean || []).filter(
+                    show => show.vote_average > 7
+                );
+
                 setKoreanSeries(koreanFiltered);
             } catch (err) {
                 console.error(err);
