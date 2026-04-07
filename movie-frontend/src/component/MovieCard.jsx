@@ -18,7 +18,7 @@ function MovieCard({ movie, onPlay }) {
                 movie.first_air_date ? "tv" : "movie"
             );
             setHoverTrailer(key);
-        }, 500);
+        }, 500); // prevent too many API calls
     };
 
     const handleMouseLeave = () => {
@@ -32,14 +32,14 @@ function MovieCard({ movie, onPlay }) {
         else addToFavorites(movie);
     }
 
-    // ✅ Use poster_path, fallback to backdrop_path, fallback to placeholder
-    const imageUrl = movie.poster_path
-        ? `https://image.tmdb.org/t/p/w500${movie.poster_path}`
-        : movie.backdrop_path
-            ? `https://image.tmdb.org/t/p/w500${movie.backdrop_path}`
-            : "/fallback-image.jpg"; // optional placeholder image
-
-    const title = movie.title || movie.name || "No title";
+    // ✅ Use poster first, then backdrop, then placeholder
+    const imageUrl = hoverTrailer
+        ? null
+        : movie.poster_path
+            ? `https://image.tmdb.org/t/p/w500${movie.poster_path}`
+            : movie.backdrop_path
+                ? `https://image.tmdb.org/t/p/w500${movie.backdrop_path}`
+                : "/placeholder.png"; // put a placeholder.png in your public folder
 
     return (
         <div
@@ -56,10 +56,7 @@ function MovieCard({ movie, onPlay }) {
                         allow="autoplay"
                     />
                 ) : (
-                    <img
-                        src={imageUrl}
-                        alt={title}
-                    />
+                    <img src={imageUrl} alt={movie.title || movie.name} />
                 )}
 
                 <div className="movie-overlay">
@@ -74,8 +71,8 @@ function MovieCard({ movie, onPlay }) {
             </div>
 
             <div className="movie-info">
-                <h3>{title}</h3>
-                <p>{(movie.release_date || movie.first_air_date || "").split("-")[0]}</p>
+                <h3>{movie.title || movie.name}</h3>
+                <p>{(movie.release_date || movie.first_air_date)?.split("-")[0]}</p>
                 <span className="rating">⭐ {movie.vote_average.toFixed(1)}</span>
             </div>
         </div>
