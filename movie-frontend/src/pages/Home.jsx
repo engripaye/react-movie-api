@@ -52,14 +52,14 @@ function Home() {
                 const koreanFiltered = (korean || []).filter(
                     show => show.vote_average > 7
                 );
+                setKoreanSeries(koreanFiltered);
 
-                // Latest Korean drama for hero banner
+                // Latest Korean dramas for hero section (take first 7–10)
                 if (latestKdrama && latestKdrama.length > 0) {
-                    const dramaWithImage = latestKdrama.find(d => d.poster_path || d.backdrop_path);
-                    setKdramaOfTheDay(dramaWithImage || latestKdrama[0]);
+                    setKdramaOfTheDay(latestKdrama.slice(0, 10)); // top 10 latest
                 }
 
-                setKoreanSeries(koreanFiltered);
+
             } catch (err) {
                 console.error(err);
                 setError("Failed to load content...");
@@ -130,10 +130,11 @@ function Home() {
                         movies={koreanSeries}
                         onPlay={handleOpenTrailer}
                     />
-                    {kdramaOfTheDay && (
+                    {/* 🔥 Korean Dramas of the Day */}
+                    {kdramaOfTheDay.length > 0 && (
                         <Section
-                            title="🔥 Korean Drama of the Day"
-                            movies={[kdramaOfTheDay]}
+                            title="🔥 Korean Dramas of the Day"
+                            movies={kdramaOfTheDay}
                             onPlay={handleOpenTrailer}
                         />
                     )}
