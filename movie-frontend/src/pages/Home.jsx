@@ -8,7 +8,8 @@ import {
     getTopRatedMovies,
     getMovieTrailer,
     getPopularTV,
-    getKoreanTV
+    getKoreanTV,
+    getLatestKoreanTV
 } from "../services/api.js";
 
 import "../css/Home.css";
@@ -23,6 +24,7 @@ function Home() {
     const [error, setError] = useState(null);
     const [loading, setLoading] = useState(true);
     const [koreanSeries, setKoreanSeries] = useState([]);
+    const [kdramaOfTheDay, setKdramaOfTheDay] = useState(null);
 
     const recommended = Array.isArray(nowPlaying)
         ? nowPlaying.filter(movie => movie.vote_average > 7)
@@ -32,21 +34,29 @@ function Home() {
         const loadData = async () => {
             setLoading(true);
             try {
-                const [pop, now, top, tv, korean] = await Promise.all([
+                const [pop, now, top, tv, korean, latestKdrama] = await Promise.all([
                     getPopularMovies().catch(() => []),
                     getNowPlayingMovies().catch(() => []),
                     getTopRatedMovies().catch(() => []),
                     getPopularTV().catch(() => []),
                     getKoreanTV().catch(() => []),
+                    getLatestKoreanTV().catch(() => []),
                 ]);
 
                 setPopular(pop || []);
                 setNowPlaying(now || []);
                 setTopRated(top || []);
                 setTvShows(tv || []);
+
+                // Popular Korean dramas (top-rated)
                 const koreanFiltered = (korean || []).filter(
                     show => show.vote_average > 7
                 );
+
+                // Latest Korean drama for hero banner
+                if (latestKdrama && latestKdrama.length > 0) {
+                    setKdramaOfTheDay(latestKdrama[0]);
+                }
 
                 setKoreanSeries(koreanFiltered);
             } catch (err) {
@@ -109,6 +119,21 @@ function Home() {
                 <div className="loading">Loading...</div>
             ) : (
                 <>
+                    {kdramaOfTheDay && (
+                        <div
+                            className="kdrama-hero"
+                            style={{
+                                backgroundImage: `url(https://image.tmdb.org/t/p/original${kdramaOfTheDay.backdrop_path})`,
+                            }}
+                        >
+                            <div className="hero-overlay">
+                                <h1>🔥 Korean Drama of the Day</h1>
+                                <h2>{kdramaOfTheDay.name}</h2>
+                                <p>⭐ {kdramaOfTheDay.vote_average.toFixed(1)}</p>
+                                <button onClick={() => handleOpenTrailer(kdramaOfTheDay)}>▶️ Watch Trailer</button>
+                            </div>
+                        </div>
+                    )}
                     <Section title="🔥 Recommended Movies" movies={recommended} onPlay={handleOpenTrailer} />
                     <Section title="🆕 Now Playing" movies={nowPlaying} onPlay={handleOpenTrailer} />
                     <Section title="⭐ Popular Movies" movies={popular} onPlay={handleOpenTrailer} />

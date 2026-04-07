@@ -56,3 +56,11 @@ export const getKoreanTV = async () => {
     const data = await res.json();
     return data.results;
 };
+
+export const getLatestKoreanTV = async () => {
+    const res = await fetch(
+        `${BASE_URL}/discover/tv?api_key=${API_KEY}&with_original_language=ko&sort_by=first_air_date.desc`
+    );
+    const data = await res.json();
+    return data.results;
+};
