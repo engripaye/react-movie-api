@@ -28,9 +28,9 @@ export const getTopRatedMovies = async () => {
     return data.results
 };
 
-export const getMovieTrailer = async (movieId) => {
+export const getMovieTrailer = async (id, type = "movie") => {
     const response = await fetch(
-        `${BASE_URL}/movie/${movieId}/videos?api_key=${API_KEY}`
+        `${BASE_URL}/${type}/${id}/videos?api_key=${API_KEY}`
     );
     const data = await response.json();
 
@@ -43,7 +43,7 @@ export const getMovieTrailer = async (movieId) => {
 
 export const getPopularTV = async () => {
     const res = await fetch(
-        `https://api.themoviedb.org/3/tv/popular?api_key=YOUR_API_KEY`
+        `${BASE_URL}/tv/popular?api_key=${API_KEY}`
     );
     const data = await res.json();
     return data.results;

@@ -14,7 +14,10 @@ function MovieCard({ movie, onPlay }) {
 
     const handleMouseEnter = () => {
         hoverTimeout.current = setTimeout(async () => {
-            const key = await getMovieTrailer(movie.id);
+            const key = await getMovieTrailer(
+                movie.id,
+                movie.first_air_date ? "tv" : "movie"
+            );
             setHoverTrailer(key);
         }, 500); // delay prevents too many API calls
     };

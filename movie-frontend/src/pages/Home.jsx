@@ -68,9 +68,12 @@ function Home() {
         }
     };
 
-    const handleOpenTrailer = async id => {
+    const handleOpenTrailer = async (movie) => {
         try {
-            const key = await getMovieTrailer(id);
+            const key = await getMovieTrailer(
+                movie.id,
+                movie.first_air_date ? "tv" : "movie"
+            );
             setSelectedTrailer(key);
         } catch (err) {
             console.error(err);
@@ -119,7 +122,7 @@ const Section = ({ title, movies = [], onPlay }) => (
         <div className="movies-row">
             {Array.isArray(movies) && movies.length > 0 ? (
                 movies.map(movie => (
-                    <MovieCard key={movie.id} movie={movie} onPlay={onPlay} />
+                    <MovieCard key={movie.id} movie={movie} onPlay={() => onPlay(movie)} />
                 ))
             ) : (
                 <div style={{ margin: "1rem" }}>No movies available</div>
