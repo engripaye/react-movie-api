@@ -60,13 +60,16 @@
   gap: 1rem;
   padding: 1rem;
 
-  /* 🔥 SNAP SCROLL */
   scroll-snap-type: x mandatory;
+
+  /* ✅ MOBILE FIX */
+  -webkit-overflow-scrolling: touch;
 }
 
 /* Each movie card should snap */
 .movies-row > * {
   scroll-snap-align: start;
+  flex: 0 0 auto; /* important for mobile */
 }
 
 /* Hide scrollbar */
@@ -134,6 +137,16 @@
 }
 
 
+@media (max-width: 768px) {
+  .scroll-btn {
+    display: none;
+  }
+
+  .scroll-container::before,
+  .scroll-container::after {
+    display: none;
+  }
+}
 @media (max-width: 639px) {
   .home {
     padding: 1rem 0;
