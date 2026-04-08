@@ -176,4 +176,5 @@ const Section = ({ title, movies = [], onPlay }) => (
     </div>
 );
 
+
 export default Home;
