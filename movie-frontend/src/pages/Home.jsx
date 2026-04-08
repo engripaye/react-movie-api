@@ -25,18 +25,26 @@ function Home() {
     const [error, setError] = useState(null);
     const [loading, setLoading] = useState(true);
     const [koreanSeries, setKoreanSeries] = useState([]);
-    const [kdramaOfTheDay, setKdramaOfTheDay] = useState(null);
+    const [kdramaOfTheDay, setKdramaOfTheDay] = useState([]); // ✅ FIXED
     const [telenovelas, setTelenovelas] = useState([]);
 
     const recommended = Array.isArray(nowPlaying)
-        ? nowPlaying.filter(movie => movie.vote_average > 7)
+        ? nowPlaying.filter(movie => movie.vote_average > 7).slice(0, 20)
         : [];
 
     useEffect(() => {
         const loadData = async () => {
             setLoading(true);
             try {
-                const [pop, now, top, tv, korean, latestKdrama, telenovelaShows] = await Promise.all([
+                const [
+                    pop,
+                    now,
+                    top,
+                    tv,
+                    korean,
+                    latestKdrama,
+                    telenovelaShows
+                ] = await Promise.all([
                     getPopularMovies().catch(() => []),
                     getNowPlayingMovies().catch(() => []),
                     getTopRatedMovies().catch(() => []),
@@ -46,26 +54,22 @@ function Home() {
                     getTelenovelas().catch(() => [])
                 ]);
 
-                setPopular(pop || []);
-                setNowPlaying(now || []);
-                setTopRated(top || []);
-                setTvShows(tv || []);
-                setTelenovelas(telenovelaShows.slice(0, 10)); // top 10 Telenovelas
+                // ✅ LIMIT EVERYTHING TO 20
+                setPopular(pop.slice(0, 20));
+                setNowPlaying(now.slice(0, 20));
+                setTopRated(top.slice(0, 20));
+                setTvShows(tv.slice(0, 20));
+                setTelenovelas(telenovelaShows.slice(0, 20));
 
-                // Popular Korean dramas (top-rated)
-                const koreanFiltered = (korean || []).filter(
-                    show => show.vote_average > 7
-                );
+                // ✅ Korean filtered + limited
+                const koreanFiltered = korean
+                    .filter(show => show.vote_average > 7)
+                    .slice(0, 20);
+
                 setKoreanSeries(koreanFiltered);
 
-                // Latest Korean dramas for hero section (take first 7–10)
-                if (latestKdrama && latestKdrama.length > 0) {
-                    setKdramaOfTheDay(latestKdrama.slice(0, 10)); // top 10 latest
-                }
-
-
-
-
+                // ✅ FIXED (no null crash)
+                setKdramaOfTheDay(latestKdrama.slice(0, 20));
 
             } catch (err) {
                 console.error(err);
@@ -78,14 +82,14 @@ function Home() {
         loadData();
     }, []);
 
-    const handleSearch = async e => {
+    const handleSearch = async (e) => {
         e.preventDefault();
         if (!searchQuery.trim()) return;
 
         setLoading(true);
         try {
             const results = await searchMovies(searchQuery);
-            setPopular(Array.isArray(results) ? results : []);
+            setPopular(results.slice(0, 20)); // ✅ keep UI consistent
         } catch (err) {
             console.error(err);
             setError("Search failed...");
@@ -93,8 +97,6 @@ function Home() {
             setLoading(false);
         }
     };
-
-
 
     const handleOpenTrailer = async (movie) => {
         try {
@@ -132,12 +134,8 @@ function Home() {
                     <Section title="⭐ Popular Movies" movies={popular} onPlay={handleOpenTrailer} />
                     <Section title="🏆 Top Rated" movies={topRated} onPlay={handleOpenTrailer} />
                     <Section title="📺 Popular Series" movies={tvShows} onPlay={handleOpenTrailer} />
-                    <Section
-                        title="🇰🇷 Korean Series"
-                        movies={koreanSeries}
-                        onPlay={handleOpenTrailer}
-                    />
-                    {/* 🔥 Korean Dramas of the Day */}
+                    <Section title="🇰🇷 Korean Series" movies={koreanSeries} onPlay={handleOpenTrailer} />
+
                     {kdramaOfTheDay.length > 0 && (
                         <Section
                             title="🔥 Korean Dramas of the Day"
@@ -147,8 +145,6 @@ function Home() {
                     )}
 
                     <Section title="📺 Telenovelas" movies={telenovelas} onPlay={handleOpenTrailer} />
-
-
                 </>
             )}
 
@@ -160,14 +156,18 @@ function Home() {
     );
 }
 
-// ✅ Safe Section Component
+// ✅ SAFE SECTION COMPONENT
 const Section = ({ title, movies = [], onPlay }) => (
     <div>
         <h2 style={{ margin: "1rem" }}>{title}</h2>
         <div className="movies-row">
-            {Array.isArray(movies) && movies.length > 0 ? (
+            {movies.length > 0 ? (
                 movies.map(movie => (
-                    <MovieCard key={movie.id} movie={movie} onPlay={() => onPlay(movie)} />
+                    <MovieCard
+                        key={movie.id}
+                        movie={movie}
+                        onPlay={() => onPlay(movie)}
+                    />
                 ))
             ) : (
                 <div style={{ margin: "1rem" }}>No movies available</div>
