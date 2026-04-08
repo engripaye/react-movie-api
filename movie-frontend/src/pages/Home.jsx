@@ -1,4 +1,5 @@
 import MovieCard from "../component/MovieCard.jsx";
+import { useRef } from "react";
 import { useState, useEffect } from "react";
 import TrailerModal from "../component/TrailerModal.jsx";
 import {
@@ -157,24 +158,50 @@ function Home() {
 }
 
 // ✅ SAFE SECTION COMPONENT
-const Section = ({ title, movies = [], onPlay }) => (
-    <div>
-        <h2 style={{ margin: "1rem" }}>{title}</h2>
-        <div className="movies-row">
-            {movies.length > 0 ? (
-                movies.map(movie => (
-                    <MovieCard
-                        key={movie.id}
-                        movie={movie}
-                        onPlay={() => onPlay(movie)}
-                    />
-                ))
-            ) : (
-                <div style={{ margin: "1rem" }}>No movies available</div>
-            )}
+const Section = ({ title, movies = [], onPlay }) => {
+    const rowRef = useRef(null);
+
+    const scrollLeft = () => {
+        rowRef.current.scrollBy({
+            left: -500,
+            behavior: "smooth"
+        });
+    };
+
+    const scrollRight = () => {
+        rowRef.current.scrollBy({
+            left: 500,
+            behavior: "smooth"
+        });
+    };
+
+    return (
+        <div className="section">
+            <div className="section-header">
+                <h2>{title}</h2>
+
+                <div className="scroll-buttons">
+                    <button onClick={scrollLeft} className="scroll-btn">◀</button>
+                    <button onClick={scrollRight} className="scroll-btn">▶</button>
+                </div>
+            </div>
+
+            <div className="movies-row" ref={rowRef}>
+                {movies.length > 0 ? (
+                    movies.map(movie => (
+                        <MovieCard
+                            key={movie.id}
+                            movie={movie}
+                            onPlay={() => onPlay(movie)}
+                        />
+                    ))
+                ) : (
+                    <div>No movies available</div>
+                )}
+            </div>
         </div>
-    </div>
-);
+    );
+};
 
 
 export default Home;
