@@ -46,17 +46,16 @@ function Home() {
                     getTelenovelas().catch(() => [])
                 ]);
 
-                setPopular(pop || []);
-                setNowPlaying(now || []);
-                setTopRated(top || []);
-                setTvShows(tv || []);
-                setTelenovelas(telenovelaShows.slice(0, 10)); // top 10 Telenovelas
+                setPopular(pop.slice(0, 20));
+                setNowPlaying(now.slice(0, 20));
+                setTopRated(top.slice(0, 20));
+                setTvShows(tv.slice(0, 20));
+                setKoreanSeries(koreanFiltered.slice(0, 20));
 
                 // Popular Korean dramas (top-rated)
                 const koreanFiltered = (korean || []).filter(
                     show => show.vote_average > 7
                 );
-                setKoreanSeries(koreanFiltered);
 
                 // Latest Korean dramas for hero section (take first 7–10)
                 if (latestKdrama && latestKdrama.length > 0) {
