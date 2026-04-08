@@ -161,43 +161,72 @@ function Home() {
 const Section = ({ title, movies = [], onPlay }) => {
     const rowRef = useRef(null);
 
-    const scrollLeft = () => {
+    const scroll = (direction) => {
+        const amount = 300;
         rowRef.current.scrollBy({
-            left: -500,
+            left: direction === "left" ? -amount : amount,
             behavior: "smooth"
         });
     };
 
-    const scrollRight = () => {
-        rowRef.current.scrollBy({
-            left: 500,
-            behavior: "smooth"
-        });
+    // 🔥 Auto scroll on hover
+    const autoScroll = (direction) => {
+        const interval = setInterval(() => {
+            rowRef.current.scrollBy({
+                left: direction === "left" ? -10 : 10
+            });
+        }, 10);
+
+        return interval;
     };
+
+    const stopAutoScroll = (interval) => {
+        clearInterval(interval);
+    };
+
+    let leftInterval, rightInterval;
 
     return (
         <div className="section">
             <div className="section-header">
                 <h2>{title}</h2>
-
-                <div className="scroll-buttons">
-                    <button onClick={scrollLeft} className="scroll-btn">◀</button>
-                    <button onClick={scrollRight} className="scroll-btn">▶</button>
-                </div>
             </div>
 
-            <div className="movies-row" ref={rowRef}>
-                {movies.length > 0 ? (
-                    movies.map(movie => (
-                        <MovieCard
-                            key={movie.id}
-                            movie={movie}
-                            onPlay={() => onPlay(movie)}
-                        />
-                    ))
-                ) : (
-                    <div>No movies available</div>
-                )}
+            <div className="scroll-container">
+                {/* LEFT BUTTON */}
+                <button
+                    className="scroll-btn left"
+                    onClick={() => scroll("left")}
+                    onMouseEnter={() => leftInterval = autoScroll("left")}
+                    onMouseLeave={() => stopAutoScroll(leftInterval)}
+                >
+                    ◀
+                </button>
+
+                {/* MOVIES ROW */}
+                <div className="movies-row" ref={rowRef}>
+                    {movies.length > 0 ? (
+                        movies.map(movie => (
+                            <MovieCard
+                                key={movie.id}
+                                movie={movie}
+                                onPlay={() => onPlay(movie)}
+                            />
+                        ))
+                    ) : (
+                        <div>No movies available</div>
+                    )}
+                </div>
+
+                {/* RIGHT BUTTON */}
+                <button
+                    className="scroll-btn right"
+                    onClick={() => scroll("right")}
+                    onMouseEnter={() => rightInterval = autoScroll("right")}
+                    onMouseLeave={() => stopAutoScroll(rightInterval)}
+                >
+                    ▶
+                </button>
             </div>
         </div>
     );

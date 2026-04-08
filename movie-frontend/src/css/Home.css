@@ -44,21 +44,29 @@
 
 .section {
   margin-bottom: 2rem;
+  position: relative;
 }
 
-.section-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 0 1rem;
+/* Container for scroll + buttons */
+.scroll-container {
+  position: relative;
 }
 
+/* MOVIE ROW */
 .movies-row {
   display: flex;
   overflow-x: auto;
   scroll-behavior: smooth;
   gap: 1rem;
   padding: 1rem;
+
+  /* 🔥 SNAP SCROLL */
+  scroll-snap-type: x mandatory;
+}
+
+/* Each movie card should snap */
+.movies-row > * {
+  scroll-snap-align: start;
 }
 
 /* Hide scrollbar */
@@ -66,24 +74,63 @@
   display: none;
 }
 
-.scroll-buttons {
-  display: flex;
-  gap: 0.5rem;
+/* 🔥 GRADIENT FADE EFFECT */
+.scroll-container::before,
+.scroll-container::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  width: 60px;
+  height: 100%;
+  z-index: 2;
+  pointer-events: none;
 }
 
+.scroll-container::before {
+  left: 0;
+  background: linear-gradient(to right, #0f0f0f, transparent);
+}
+
+.scroll-container::after {
+  right: 0;
+  background: linear-gradient(to left, #0f0f0f, transparent);
+}
+
+/* 🔥 SCROLL BUTTONS */
 .scroll-btn {
-  background: rgba(0, 0, 0, 0.7);
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  z-index: 3;
+
+  background: rgba(0, 0, 0, 0.6);
   color: white;
   border: none;
-  padding: 0.5rem 0.8rem;
+  padding: 0.7rem;
   cursor: pointer;
-  border-radius: 5px;
-  font-size: 1rem;
-  transition: 0.3s;
+  border-radius: 50%;
+  opacity: 0;
+  transition: all 0.3s ease;
 }
 
+/* Position buttons */
+.scroll-btn.left {
+  left: 10px;
+}
+
+.scroll-btn.right {
+  right: 10px;
+}
+
+/* 🔥 SHOW BUTTONS ON HOVER */
+.scroll-container:hover .scroll-btn {
+  opacity: 1;
+}
+
+/* Hover effect */
 .scroll-btn:hover {
   background: #e50914;
+  transform: translateY(-50%) scale(1.1);
 }
 
 
